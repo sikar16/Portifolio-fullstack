@@ -8,7 +8,7 @@ import { PORT, HOST } from "./src/config/secret.js";
 const app = express();
 
 app.use(cors({
-    origin: "https://portifolio-fullstack-5.onrender.com/", 
+    origin: "https://portifolio-fullstack-azure.vercel.app/", 
     methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"], 
     credentials: true
