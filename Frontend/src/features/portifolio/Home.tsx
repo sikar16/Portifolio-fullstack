@@ -17,7 +17,7 @@ export default function Home() {
                 <div className="text-center  grid md:grid-cols-2 gap-16 items-center">
                     <div className="text-center  space-y-8 order-2 md:order-1 md:text-left">
                         <span className="text-accent tracking-wider text-sm">Hello I'm</span>
-                        <h1 className="text-xl text-[hsl(var(--accent))] md:text-4xl leading-tight">
+                        <h1 className="text-xl text-[hsl(var(--accent))] md:text-2xl leading-tight">
                             {userData?.userInfo.firstName} {userData?.userInfo.lastName}
                             <span className="text-accent animate-pulse">.</span>
                         </h1>

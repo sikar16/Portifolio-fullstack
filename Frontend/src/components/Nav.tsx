@@ -1,10 +1,14 @@
+import { useGetUserPortifolioQuery } from '@/services/portifolioService';
 import { Button } from './ui/button'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 function Nav() {
     const location = useLocation()
     const currentPath = location.pathname
 
+    const { firstName } = useParams(); // Get firstName from URL params
+    const { data } = useGetUserPortifolioQuery(firstName); // Pass firstName as an argument
+    const userData = data?.data;
     // Map of paths to their corresponding menu items
     const menuItems = [
         { name: 'Home', path: '' },
@@ -20,7 +24,9 @@ function Nav() {
         <nav className="fixed w-full z-20 top-0 left-0  backdrop-blur-sm">
             <div className="max-w-screen-xl flex items-center justify-between mx-auto p-6">
                 <div className="flex items-center">
-                    <span className="text-3xl font-bold text-white/60 hover:text-white transition-colors">Name</span>
+                    <span className="text-xl font-bold text-[hsl(var(--accent))]   transition-colors">
+                        {userData?.userInfo.firstName} {userData?.userInfo.lastName}
+                    </span>
                     <span className="text-3xl font-bold text-[hsl(var(--accent))] ">.</span>
                 </div>
 
@@ -30,7 +36,7 @@ function Nav() {
                             <li key={item.path}>
                                 <a
                                     href={item.path}
-                                    className={`relative font-medium transition-colors ${currentPath === item.path
+                                    className={`relative font-medium transition-colors text-sm ${currentPath === item.path
                                         ? 'text-white underline decoration-[hsl(var(--accent))]  decoration-2 underline-offset-8'
                                         : 'text-white/60 hover:text-white'
                                         }`}
