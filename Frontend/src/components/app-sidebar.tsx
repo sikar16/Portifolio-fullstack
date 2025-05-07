@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocation } from "react-router-dom";  // Import from react-router-dom
+import { useLocation, useNavigate } from "react-router-dom";  // Import from react-router-dom
 import {
     Home,
     Inbox,
@@ -9,7 +9,8 @@ import {
     GraduationCap,
     Award,
     MessageSquare,
-    BookOpen
+    BookOpen,
+    LogOut
 } from "lucide-react";
 import {
     Sidebar,
@@ -35,12 +36,26 @@ const items = [
 
 export function AppSidebar() {
     const location = useLocation();  // Get the current location
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
+        localStorage.clear();
+
+
+        navigate('/');
+
+        alert('You have been logged out successfully');
+    };
+
 
     return (
         <Sidebar>
-            <SidebarContent className="bg-[hsl(var(--primary))]">
-                <SidebarGroup className="text-white gap-4">
-                    <SidebarGroupLabel className="text-white">Name dashboard</SidebarGroupLabel>
+            <SidebarContent className="bg-[hsl(var(--primary))] flex flex-col min-h-screen">
+                <SidebarGroup className="text-white gap-4 mt-6 flex-grow">
+                    <SidebarGroupLabel className="text-[hsl(var(--accent))] text-xl">Dashboard</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => {
@@ -48,20 +63,34 @@ export function AppSidebar() {
                                 return (
                                     <SidebarMenuItem
                                         key={item.title}
-                                        className={isActive ? "bg-[hsl(var(--accent))] text-white rounded-md " : ""}
+                                        className={isActive ? "bg-[hsl(var(--accent))] text-white rounded-md" : ""}
                                     >
                                         <SidebarMenuButton asChild>
-                                            <a href={item.url} className="flex items-center gap-2 p-2">
+                                            <a href={item.url} className="flex items-center gap-3 p-3">
                                                 <item.icon className="w-4 h-4" />
-                                                <span className="text-xs">{item.title}</span>
+                                                <span className="text-sm">{item.title}</span>
                                             </a>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 );
                             })}
+                            <div className="pt-4 border-t border-white/20">
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton asChild>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="flex items-center gap-2 p-2 w-full text-red-400 hover:text-red-300"
+                                        >
+                                            <LogOut className="w-4 h-4" />
+                                            <span className="text-xs">Logout</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            </div>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
+
             </SidebarContent>
         </Sidebar>
     );

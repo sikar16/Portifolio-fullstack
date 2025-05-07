@@ -26,14 +26,12 @@ export function AppSidebar() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Clear authentication data
-        localStorage.removeItem('sp_token');
-        localStorage.removeItem('sp_user');
-
-        // Redirect to login page
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('userId');
+        localStorage.clear();
         navigate('/');
 
-        // Optional: Show logout confirmation
         alert('You have been logged out successfully');
     };
 
@@ -61,8 +59,7 @@ export function AppSidebar() {
                                 );
                             })}
 
-                            {/* Logout Button at bottom */}
-                            <div className="mt-auto pt-4 border-t border-white/20">
+                            <div className="pt-4 border-t">
                                 <SidebarMenuItem>
                                     <SidebarMenuButton asChild>
                                         <button
