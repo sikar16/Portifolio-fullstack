@@ -1,0 +1,15 @@
+.testimonial-slider .slick-dots li button:before {
+  color: hsl(var(--accent));
+  opacity: 0.5;
+  font-size: 10px;
+}
+
+.testimonial-slider .slick-dots li.slick-active button:before {
+  color: hsl(var(--accent));
+  opacity: 1;
+}
+
+.testimonial-slider .slick-prev:before,
+.testimonial-slider .slick-next:before {
+  color: hsl(var(--accent));
+}

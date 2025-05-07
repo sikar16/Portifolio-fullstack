@@ -1,0 +1,248 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model ServiceProvider {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  fullName  String
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id            Int              @id @default(autoincrement())
+  phoneNumber   String           @unique
+  email         String           @unique
+  password      String
+  status        UserStatus       
+  createdAt     DateTime         @default(now())
+  userInfo      UserInfo?
+  userDetails   UserDetail?
+  services      Service[]
+  skills        Skill[]
+  projects      Project[]
+  testimonials  Testimonial[]
+  blogs         Blog[]
+  socialLinks   SocialMediaLink[]
+
+  ProjectCategory ProjectCategory[]
+
+  SkillCategory SkillCategory[]
+
+  Experience Experience[]
+
+  Education Education[]
+
+  ServiceItem ServiceItem[]
+
+  SkillItem SkillItem[]
+
+  GeneralDescription GeneralDescription[]
+}
+
+model UserInfo {
+  id          Int     @id @default(autoincrement())
+  firstName   String
+  lastName  String
+  country     String
+  city        String
+  userId      Int     @unique
+  user        User    @relation(fields: [userId], references: [id])
+}
+
+model UserDetail {
+  id                  Int     @id @default(autoincrement())
+  title               String
+  heroImage           String?
+  yearsOfExperience   Int
+  aboutMe             String
+  cv                  String?
+  userId              Int     @unique
+  user                User    @relation(fields: [userId], references: [id])
+}
+
+model GeneralDescription {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  userId    Int      @unique  
+  user      User     @relation(fields: [userId], references: [id])
+  services  Service[]
+}
+model Service {
+  id                  Int                  @id @default(autoincrement())
+  userId              Int
+  user                User                 @relation(fields: [userId], references: [id])
+  serviceItems        ServiceItem[]        @relation("ServiceServiceItems") 
+  features            Feature[]            @relation("ServiceFeatures")
+  generalDescription  GeneralDescription?  @relation(fields: [generalDescriptionId], references: [id])
+  generalDescriptionId Int?
+
+  ServiceItem ServiceItem[]
+
+  Feature Feature[]
+}
+
+model ServiceItem {
+  id                  Int          @id @default(autoincrement())
+  name                String
+  icon                String?
+  description         String
+  features            Feature[] 
+  userId              Int
+  user                User         @relation(fields: [userId], references: [id])
+  serviceId           Int
+  service             Service      @relation(fields: [serviceId], references: [id])
+
+  Service Service[] @relation("ServiceServiceItems")
+}
+
+model Feature {
+  id            Int           @id @default(autoincrement())
+  name          String
+  serviceId     Int
+  service       Service       @relation(fields: [serviceId], references: [id])
+  serviceItemId Int?
+  serviceItem   ServiceItem?  @relation(fields: [serviceItemId], references: [id])
+
+  Service Service[] @relation("ServiceFeatures")
+}
+
+
+
+model SkillCategory {
+  id      Int      @id @default(autoincrement())
+  name    String
+  userId  Int
+  user    User      @relation(fields: [userId], references: [id])
+  skills  Skill[]
+  skillItems SkillItem[]
+}
+
+model SkillItem {
+  id               Int      @id @default(autoincrement())
+  name             String
+  proficiency      String
+  icon             String?
+  skillCategoryId  Int
+  userId           Int
+  skillCategory    SkillCategory @relation(fields: [skillCategoryId], references: [id])
+  user             User          @relation(fields: [userId], references: [id])
+}
+
+model Skill {
+  id                  Int      @id @default(autoincrement())
+  general_description String
+  skillCategoryId     Int
+  userId              Int
+  skillCategory       SkillCategory @relation(fields: [skillCategoryId], references: [id])
+  user                User          @relation(fields: [userId], references: [id])
+}
+
+model ProjectCategory {
+  id      Int      @id @default(autoincrement())
+  name    String
+  userId  Int
+  user    User      @relation(fields: [userId], references: [id])
+  projects Project[]
+}
+
+model Project {
+  id                  Int                  @id @default(autoincrement())
+  name                String
+  general_description String
+  description         String
+  demoLink            String?
+  tecnology            String?
+  userId              Int
+  projectCategoryId   Int
+  projectCategory     ProjectCategory      @relation(fields: [projectCategoryId], references: [id])
+  user                User                 @relation(fields: [userId], references: [id])
+  projectImage     ProjectImage[]      
+}
+
+model ProjectImage {
+  id          Int     @id @default(autoincrement())
+  projectId Int
+  image       String
+  project Project    @relation(fields: [projectId], references: [id])
+  
+}
+
+model Blog {
+  id          Int          @id @default(autoincrement())
+  title       String
+  content     String
+  categoryName   String
+  userId      Int
+  user        User         @relation(fields: [userId], references: [id])
+  blogImages   BlogImage[]  
+}
+
+model BlogImage {
+  id          Int     @id @default(autoincrement())
+  imageUrl    String
+  blogId      Int
+  blog        Blog    @relation(fields: [blogId], references: [id])
+}
+
+model SocialMediaLink {
+  id      Int     @id @default(autoincrement())
+  name    String
+  link    String
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+model Testimonial {
+  id                  Int      @id @default(autoincrement())
+  reviewerFullName    String
+  reviewerTitle       String
+  feedback            String
+  dateOfReview        DateTime @default(now())
+  userId              Int
+  user                User     @relation(fields: [userId], references: [id])
+}
+
+model Experience {
+    id          Int      @id @default(autoincrement())
+    general_description String
+    companyName String
+    position String
+    Responsibilities String
+    startDate   String   // Use DateTime if working with dates
+    endDate     String   // Use DateTime if working with dates
+    area        String
+    userId      Int
+    user        User     @relation(fields: [userId], references: [id])
+}
+model Education {
+    id              Int      @id @default(autoincrement())
+    general_description String
+    institutionName String
+    degree          String
+    fieldOfStudy    String
+    startDate       String   // Use DateTime if working with dates
+    endDate         String   // Use DateTime if working with dates
+    userId          Int
+    user            User     @relation(fields: [userId], references: [id])
+}
