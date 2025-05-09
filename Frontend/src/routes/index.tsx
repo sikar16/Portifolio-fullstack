@@ -39,7 +39,7 @@ export const router = createBrowserRouter(
         element={<Profile />}
       />
 
-      <Route path="/dashboard" element={<Dashboard_layout_user />}>
+      <Route path="/dash" element={<Dashboard_layout_user />}>
         
 {/*         <Route path="profile" element={<Profile />} />
          */}
