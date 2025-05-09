@@ -11,7 +11,7 @@ app.use(cors({
     origin: "*", 
     methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"], 
-    credentials: true
+   // credentials: true
 }));
 
 app.use(bodyParser.json({ limit: '50mb' }));
