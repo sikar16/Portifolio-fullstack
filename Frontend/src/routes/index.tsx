@@ -34,15 +34,13 @@ export const router = createBrowserRouter(
         path="/denied"
         element={<Accessdenied />}
       />
-      <Route
+{/*       <Route
         path="/dashboard/profile"
         element={<Profile />}
-      />
+      /> */}
 
-      <Route path="/dash" element={<Dashboard_layout_user />}>
-        
-{/*         <Route path="profile" element={<Profile />} />
-         */}
+      <Route path="/dashboard" element={<Dashboard_layout_user />}>
+        <Route path="profile" element={<Profile />} />
         <Route path="service" element={<Service />} />
         <Route path="skill" element={<Skill />} />
         <Route path="project" element={<Project />} />
